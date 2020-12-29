@@ -146,12 +146,14 @@ function Game(savedGame) {
 	function hideInfoDrawer() {
 		if ($("#info").height() === 570) {
 			$("#info").clearQueue().animate({"height": "540px"}, 100, "easeOutQuad");
+			$('#info').css("display", "none");
 		}
 	}
 	
 	function showInfoDrawer() {
 		if ($("#info").height() === 540) {
 			$("#info").clearQueue().animate({"height": "570px"}, 100, "easeInQuad");
+			$("#info").css("display", "block");
 		}
 	}
 	
@@ -161,6 +163,21 @@ function Game(savedGame) {
 	
 	function fieldObject(element, object) {
 		return $(element).data("fieldObject", object);
+	}
+
+	function displayThreats() {
+		// TODO: a way for end user to set this flag
+		if (localStorage.displayhelp == 'true') {
+			$("#board > tbody > tr > td").each(function (index, cell) {
+				cell = $(cell);
+				let piece = cell.children(".piece");
+				if (piece.length == 1 && pieceObject(piece).field.reachableBy[($(piece).hasClass("white") ? "black" : "white")].length) {
+					cell.css("border-radius", "20px");
+				} else {
+					cell.css("border-radius", "5px");
+				}
+			})
+		}
 	}
 	
 	function finishMove() {
@@ -221,7 +238,9 @@ function Game(savedGame) {
 				}
 			});
 		}
-		
+
+		displayThreats();
+
 		// Update info drawer
 		updateInfoDrawer();
 		
@@ -815,10 +834,14 @@ function Game(savedGame) {
 		});
 		
 		// Mirror the first knight of each color
-		$("td > .white.knight:first, td > .black.knight:first").css("-moz-transform", "scaleX(-1)");
-		$("td > .white.knight:first, td > .black.knight:first").css("-webkit-transform", "scaleX(-1)");
-		$("td > .white.knight:first, td > .black.knight:first").css("-o-transform", "scaleX(-1)");
-		$("td > .white.knight:first, td > .black.knight:first").css("-ms-transform", "scaleX(-1)");
+		$("td > .black.knight:first").css("-moz-transform", "scale(-1, -1)");
+		$("td > .black.knight:first").css("-webkit-transform", "scale(-1, -1)");
+		$("td > .black.knight:first").css("-o-transform", "scale(-1, -1)");
+		$("td > .black.knight:first").css("-ms-transform", "scale(-1, -1)");
+		$("td > .white.knight:first").css("-moz-transform", "scaleX(-1)");
+		$("td > .white.knight:first").css("-ms-transform", "scaleX(-1)");
+		$("td > .white.knight:first").css("-webkit-transform", "scaleX(-1)");
+		$("td > .white.knight:first").css("-o-transform", "scaleX(-1)");
 		
 		/* Piece draggability */
 		$("td > .piece").each(function (index, element) {
@@ -829,7 +852,8 @@ function Game(savedGame) {
 					// Call a function before actually dragged
 					start: function (event, ui) {
 						return pieceObject(ui.helper[0]).startDragging();
-					}
+					},
+					mouseButton: 3
 				});
 				
 				$(element).click(function () {
@@ -858,6 +882,7 @@ function Game(savedGame) {
 				clearInterval(showCaptionInterval);
 			}
 		);
+		displayThreats();
 		updateInfoDrawer();
 		updateGameTime();
 		showInfoDrawer();

@@ -72,8 +72,6 @@ h1 a {
 	width: 540px;
 	height: 540px;
 	margin: 0 auto 0 auto;
-	top: 86px;
-	
 	-webkit-perspective: 900;
 }
 
@@ -338,6 +336,16 @@ tr:last-child > th {
 	-ie-background-size: 360px auto;
 }
 
+
+.piece.black {
+	-moz-transform: scaleY(-1);
+	-o-transform: scaleY(-1);
+	-webkit-transform: scaleY(-1);
+	transform: scaleY(-1);
+	filter: FlipV;
+	-ms-filter: "FlipV";
+}
+
 .white.pawn {
 	background-position: 0 0;
 }
@@ -395,10 +403,15 @@ tr:last-child > th {
 	padding-right: 10px;
 }
 
+#whiteCemetery > li {
+	transform: scaleY(-1);
+}
+
 #blackCemetery {
+	transform: scaleY(-1);
 	position: absolute;
 	top: 30px;
-	left: 540px;
+	left: 570px;
 	width: 120px;
 	height: 480px;
 	padding-left: 10px;
@@ -422,6 +435,11 @@ tr:last-child > th {
 /* Info drawer */
 
 #info {
+	left: 15px; 
+	top: -15px; 
+	transform: rotate(-90deg);
+	display: none;
+
 	position: absolute;
 	width: 540px;
 	height: 540px;
@@ -449,6 +467,7 @@ tr:last-child > th {
 	bottom: 9px;
 	left: 30px;
 	right: 30px;
+	transform: rotate(180deg);
 }
 
 #currentTurn {
